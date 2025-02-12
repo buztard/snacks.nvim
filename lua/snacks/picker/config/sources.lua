@@ -278,6 +278,7 @@ M.git_log = {
   preview = "git_show",
   confirm = "git_checkout",
   sort = { fields = { "score:desc", "idx" } },
+  supports_live = true,
 }
 
 ---@type snacks.picker.git.log.Config

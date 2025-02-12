@@ -104,6 +104,11 @@ function M.log(opts, ctx)
     table.insert(args, "--author=" .. opts.author)
   end
 
+  if opts.live and ctx.filter.search ~= "" then
+    args[#args + 1] = '-G'
+    args[#args + 1] = ctx.filter.search
+  end
+
   local file ---@type string?
   if opts.current_line then
     local cursor = vim.api.nvim_win_get_cursor(ctx.filter.current_win)
