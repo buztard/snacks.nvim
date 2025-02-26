@@ -118,10 +118,18 @@ function M.grep(opts, ctx)
         item.cwd = cwd
         local file, line, col, text = item.text:match("^(.+):(%d+):(%d+):(.*)$")
         if not file then
-          if not item.text:match("WARNING") then
-            Snacks.notify.error("invalid grep output:\n" .. item.text)
+          if item.text:match("WARNING") then
+            return false
           end
-          return false
+          local file_only_output = vim.tbl_contains(args, function(v)
+            return vim.tbl_contains({ "-l", "--files-with-matches", "--files-without-match" }, v)
+          end, { predicate = true })
+          if file_only_output then
+            item.file = item.text
+          else
+            Snacks.notify.error("invalid grep output:\n" .. item.text)
+            return false
+          end
         else
           item.line = text
           item.file = file
