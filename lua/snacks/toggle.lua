@@ -204,6 +204,26 @@ function M.line_number(opts)
 end
 
 ---@param opts? snacks.toggle.Config
+function M.crosshair(opts)
+  local cursorline, cursorcolumn = true, true
+  return M.new({
+    id = "crosshair",
+    name = "Crosshair",
+    get = function()
+      return vim.opt_local.cursorline:get() or vim.opt_local.cursorcolumn:get()
+    end,
+    set = function(state)
+      if state then
+        vim.opt_local.cursorline, vim.opt_local.cursorcolumn = cursorline, cursorcolumn
+      else
+        cursorline, cursorcolumn = vim.opt_local.cursorline:get(), vim.opt_local.cursorcolumn:get()
+        vim.opt_local.cursorline, vim.opt_local.cursorcolumn = false, false
+      end
+    end,
+  }, opts)
+end
+
+---@param opts? snacks.toggle.Config
 function M.inlay_hints(opts)
   return M.new({
     id = "inlay_hints",
